@@ -1,3 +1,4 @@
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import java.io.File;
@@ -6,7 +7,7 @@ public class StaticThing {
     protected double y;
     protected double sizeX;
     protected double sizeY;
-    private ImageView imageView;
+    protected ImageView imageView;
     public StaticThing (double x, double y,double sizeX, double sizeY, String fileName, double value) {
         this.x = x;
         this.y = y;

@@ -19,7 +19,7 @@ public class Main extends Application {
         primaryStage.setMinWidth(400);
         primaryStage.setMinHeight(300);
         primaryStage.setWidth(600); // largeur préférée
-        primaryStage.setHeight(350); // hauteur préférée
+        primaryStage.setHeight(400); // hauteur préférée
         primaryStage.setMaxWidth(800);
         primaryStage.setMaxHeight(600);
 

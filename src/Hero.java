@@ -5,9 +5,12 @@ public class Hero extends AnimatedThing{
         super(fileName, x, y,state);
     }
     public static void jump(){
-        jumpOk = 40; //hauteur de saut
+        jumpOk = 30; //paramètre de saut
         altitude = 0;
         System.out.println("Jump");
     }
-
+    public static void shoot(){
+        shoot = 20;
+        System.out.println("Shoot");
+    }
 }

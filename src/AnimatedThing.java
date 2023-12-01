@@ -18,7 +18,8 @@ public abstract class AnimatedThing {
     static int countFrame;
     static int maxFrame;
     private int jumpIndex=0;
-    protected static int jumpOk =0;
+    protected static int jumpOk = 0;
+    protected static int shoot = 0;
     public AnimatedThing(String fileName, int x, int y, int state){
         countFrame =0;
         maxFrame = 4;
@@ -31,7 +32,6 @@ public abstract class AnimatedThing {
         File fichierImage = new File(fileName);
 
         // Créez une image à partir du fichier
-
         spriteSheet = new Image(fichierImage.toURI().toString());
         sprite = new ImageView(spriteSheet);
         sprite.setViewport(new Rectangle2D(0,0,85,100));
@@ -50,16 +50,14 @@ public abstract class AnimatedThing {
         if (countFrame == maxFrame) {
             //Saut
             if (jumpOk != 0) {
-                if (jumpOk > 20 ){
+                if (jumpOk > 15 ){
                     Hero.sprite.setViewport(new Rectangle2D(0, 165, 85, 100));
-                    //System.out.println("Jump0");
                     sprite.setY(200-altitude*5);
                     altitude= altitude +1;
                 }
                 else {
                     Hero.sprite.setViewport(new Rectangle2D(Hero.offset, 165, 85, 100));
-                    //System.out.println("Jump1");
-                    sprite.setY(200- altitude*5);
+                    sprite.setY(200-altitude*5);
                     altitude= altitude-1;
                 }
                 jumpOk=jumpOk - 1;
@@ -67,15 +65,24 @@ public abstract class AnimatedThing {
             }
             //Course
             else {
-                Hero.sprite.setViewport(new Rectangle2D((Hero.index) * Hero.offset, 0, 85, 100));
-                if (Hero.index == Hero.maxIndex) {
-                    Hero.index = 0;
+                if (shoot != 0){
+                    Hero.sprite.setViewport(new Rectangle2D((Hero.index) * Hero.offset - 8, 328, 85, 100));
+                    if (Hero.index == Hero.maxIndex) {
+                        Hero.index = 0;
+                    }
+                    else {
+                        Hero.index += 1;
+                    }
+                    shoot = shoot-1;
                 }
                 else {
-                    Hero.index += 1;
+                    Hero.sprite.setViewport(new Rectangle2D((Hero.index) * Hero.offset, 0, 80, 100));
+                    if (Hero.index == Hero.maxIndex) {
+                        Hero.index = 0;
+                    } else {
+                        Hero.index += 1;
+                    }
                 }
-
-
                 countFrame = 0;
             }
         }
