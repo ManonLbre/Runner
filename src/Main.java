@@ -35,22 +35,21 @@ public class Main extends Application {
         theScene.render(theScene.Cam);
 
         //scene.hero.getSprite().setViewport(new Rectangle2D(75,0,85,100));
-        AnimationTimer timer = new AnimationTimer() {
+        AnimationTimer timer = null;
+        timer = new AnimationTimer() {
             public void handle(long time) {
                 theScene.hero.update(time);
                 //camera.update(time);
                 theScene.update(time);
                 theScene.foe.foeSummoning(time);
                 theScene.checkCollision(theScene.hero,theScene.foe);
-
+                if(theScene.numberOfLives == 0) {
+                    stop();
+                    theScene.GameOver(root);
+                }
             }
         };
         timer.start();
-        if (theScene.numberOfLives == 0){
-            timer.stop();
-
-        }
-
     }
 
     public static void main(String[] args) {

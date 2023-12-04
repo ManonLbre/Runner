@@ -17,6 +17,7 @@ public class GameScene extends Scene {
     protected Hero hero;
     protected Foe foe;
     protected static StaticThing life;
+    protected static StaticThing gameOver;
     protected static Hero ball;
     protected double numberOfLives;
     protected static int offset;
@@ -29,13 +30,15 @@ public class GameScene extends Scene {
         left = new StaticThing(0,0,800,400,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\desert.png",0);
         right = new StaticThing(800,0,800,400,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\desert.png",0);
         hero = new Hero("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\heros.png",100,200,0);
-        life = new StaticThing(10,10,33,77,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\life.png",3);
+        life = new StaticThing(20,10,33,77,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\life.png",3);
         foe = new Foe("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\foe.png",500,165,1);
         //ball = new Hero("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\heros.png",100,200,0);
         root.getChildren().add(left.getImageView()); // add the object to the root
         root.getChildren().add(right.getImageView());
         root.getChildren().add(hero.getSprite_hero());
         root.getChildren().add(life.getImageView());
+        root.getChildren().get(3).setScaleX(2);
+        root.getChildren().get(3).setScaleY(2);
         root.getChildren().add(foe.getSprite_foe());
         root.getChildren().get(4).setScaleX(0.45); //redimensionne l'image
         root.getChildren().get(4).setScaleY(0.45);
@@ -92,20 +95,25 @@ public class GameScene extends Scene {
     public void checkCollision(Hero hero, Foe foe) {
 
         Rectangle rect1 = new Rectangle((int) hero.getXHero()+rogner, (int) hero.getYHero()+rogner, 85-rogner, 100-rogner);
-        Rectangle rect2 = new Rectangle((int) foe.getXFoe()+rogner+42, (int) 220+rogner, (int) 67.5-rogner, 90-rogner);
+        Rectangle rect2 = new Rectangle((int) foe.getXFoe()+rogner+42, (int) 230+rogner, (int) 67.5-rogner, 90-rogner);
         //System.out.println("X hero "+hero.getXHero()+", Y hero "+hero.getYHero());
         //System.out.println("X foe "+foe.getXFoe()+rogner+42+", Y foe "+foe.getYFoe());
 
         if (rect1.intersects(rect2)) {
-            System.out.println("Collision détectée !");
+
             if (collision_test_ancien==false){
                 numberOfLives-=0.5;
                 collision_test_ancien = true;
+                System.out.println("Collision détectée !");
             }
-
         }
         else{
             collision_test_ancien = false;
         }
+    }
+
+    public void GameOver(Group root){
+        gameOver = new StaticThing(50,-75,500,500,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\gameover.png",0);
+        root.getChildren().add(gameOver.getImageView());
     }
 }

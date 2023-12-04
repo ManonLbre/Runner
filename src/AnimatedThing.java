@@ -152,7 +152,7 @@ public abstract class AnimatedThing {
                     enemy = true;
                     enemy_index = rand.nextInt(3);
                     setXFoe(550);
-                    System.out.println(getXFoe()+"X foe");
+
                 }
             }
         }
