@@ -12,10 +12,10 @@ public class StaticThing {
         this.x = x;
         this.y = y;
 
-        File fichierImage = new File(fileName);
+        File imageFile = new File(fileName);
 
-        // Créez une image à partir du fichier
-        Image image = new Image(fichierImage.toURI().toString());
+        // Create an image from a file
+        Image image = new Image(imageFile.toURI().toString());
 
         this.imageView = new ImageView(image);
         this.imageView.setX(x);

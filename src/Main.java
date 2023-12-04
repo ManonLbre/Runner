@@ -15,11 +15,11 @@ public class Main extends Application {
         GameScene theScene = new GameScene(root);//, 600, 400,true);
         primaryStage.setScene(theScene);
 
-        // Définir les dimensions minimales, préférées et maximales de la fenêtre
+        // Specify the minimum, preferred, and maximum dimensions of the window
         primaryStage.setMinWidth(400);
         primaryStage.setMinHeight(300);
-        primaryStage.setWidth(600); // largeur préférée
-        primaryStage.setHeight(400); // hauteur préférée
+        primaryStage.setWidth(600); // favourite width
+        primaryStage.setHeight(400); // favourite height
         primaryStage.setMaxWidth(800);
         primaryStage.setMaxHeight(600);
 
@@ -40,10 +40,16 @@ public class Main extends Application {
                 theScene.hero.update(time);
                 //camera.update(time);
                 theScene.update(time);
+                theScene.foe.foeSummoning(time);
+                theScene.checkCollision(theScene.hero,theScene.foe);
+
             }
         };
         timer.start();
+        if (theScene.numberOfLives == 0){
+            timer.stop();
 
+        }
 
     }
 
