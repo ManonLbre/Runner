@@ -129,10 +129,11 @@ public abstract class AnimatedThing {
     int foe_countMax=10; // Enemy spawn frequency
     boolean enemy= false;
     int enemy_index=0; //Point out the rank of the enemy
-    int speed=15;
+    int speed;
 
     public void foeSummoning (long time){
         //Animation of the foe
+        speed= (int) (15+GameScene.getScore()/50);
         if (countFrame == maxFrame) {
             if(enemy) {
                 double position = getXFoe();

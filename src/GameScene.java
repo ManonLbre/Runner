@@ -4,6 +4,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
+import javafx.scene.layout.StackPane;
 
 import java.awt.*;
 
@@ -22,7 +24,8 @@ public class GameScene extends Scene {
     protected static int offset;
     protected int cut=20;
     private StaticThing home;
-
+    protected static double score=0;
+    private Text scoreText;
     protected boolean start = false;
 
     public GameScene(Group root){
@@ -35,9 +38,11 @@ public class GameScene extends Scene {
         life = new StaticThing(20,10,33,77,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\life.png",3);
         foe = new Foe("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\foe.png",500,165,1);
         //ball = new Hero("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\heros.png",100,200,0);
-
         home = new StaticThing(-55,-75,600,350,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\home.png",0);
 
+        scoreText = new Text("Score : "+score);
+        scoreText.setX(450);
+        scoreText.setY(20);
 
         root.getChildren().add(left.getImageView()); // Add the object to the root
         root.getChildren().add(right.getImageView());
@@ -51,6 +56,7 @@ public class GameScene extends Scene {
         root.getChildren().add(home.getImageView());
         root.getChildren().get(5).setScaleX(0.85);
         root.getChildren().get(5).setScaleY(0.85);
+        root.getChildren().add(scoreText);
         numberOfLives = 3;
         offset = 11;
     }
@@ -78,7 +84,7 @@ public class GameScene extends Scene {
     public void update(long time){
 
         if (AnimatedThing.countFrame == AnimatedThing.maxFrame){
-            Cam.setX(Cam.getX()+15);
+            Cam.setX(Cam.getX()+15+score/50);
             this.render(Cam);
             this.setOnKeyPressed( (event)->{
 
@@ -95,6 +101,8 @@ public class GameScene extends Scene {
                 }
             });
             AnimatedThing.countFrame = 0;
+            score += 1;
+            scoreText.setText("Score : " + String.format("%.0f", score));
         }
         else {
             AnimatedThing.countFrame+=1;
@@ -166,6 +174,6 @@ public class GameScene extends Scene {
             }
         });
     }
-
+    public static double getScore() {return score;}
 }
 
