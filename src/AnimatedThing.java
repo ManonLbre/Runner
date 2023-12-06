@@ -5,11 +5,6 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 import java.util.Random;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 public abstract class AnimatedThing {
     private double x_hero, y_hero;
     private double x_foe, y_foe;
@@ -27,6 +22,8 @@ public abstract class AnimatedThing {
     static int maxFrame;
     private int jumpIndex=0;
     protected static int jumpOk = 0;
+    private double verticalVelocity = 0; // Initial vertical speed
+    private double gravity = 2; // Gravity value
     protected static int shoot = 0;
     protected static int indexShoot;
     protected static int maxIndexShoot;
@@ -36,7 +33,6 @@ public abstract class AnimatedThing {
     public AnimatedThing(String fileName, int x, int y, int state){
         countFrame = 0;
         maxFrame = 4;
-        //duration = 41666666;
         offset = 85;
         status = state;
         maxIndex = 5;
@@ -77,20 +73,49 @@ public abstract class AnimatedThing {
         //Animation of the runner
         if (countFrame == maxFrame) {
             //Jump
-            if (jumpOk != 0) {
-                if (jumpOk > 20) {
+            if (jumpOk > 1) {
+                /*if (jumpOk > 20) {
                     Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
                     sprite_hero.setY(200 - altitude * 5);
                     setYHero(200 - altitude * 5);
                     altitude = altitude + 1;
                 }
                 else {
-                    Hero.sprite_hero.setViewport(new Rectangle2D(Hero.offset, 165, 85, 100));
+                    Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
                     sprite_hero.setY(200 - altitude * 5);
                     setYHero(200 - altitude * 5);
                     altitude = altitude - 1;
                 }
+                jumpOk = jumpOk - 1;*/
+
+                if (jumpOk > 13) {
+                    Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
+                    verticalVelocity = -11; // Initial upward velocity
+                } else {
+                    Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
+                    verticalVelocity += gravity; // Apply gravity to simulate the fall
+                }
+
+                // Update the vertical position based on the vertical velocity
+                sprite_hero.setY(sprite_hero.getY() + verticalVelocity);
+                setYHero(sprite_hero.getY());
+
                 jumpOk = jumpOk - 1;
+
+                if (sprite_hero.getY() > 200) { // 200 is the ground position
+                    sprite_hero.setY(200);
+                    setYHero(200);
+                    verticalVelocity = 0;
+                }
+            }
+            else if (jumpOk == 1){
+                // Reset the hero's position to the ground when the jump is completed
+                if (sprite_hero.getY() < 200) {
+                    sprite_hero.setY(200);
+                    setYHero(200);
+                    verticalVelocity = 0;
+                }
+                jumpOk = 0;
             }
 
             //Run and shoot
@@ -123,10 +148,10 @@ public abstract class AnimatedThing {
         y_hero = getYHero();
     }
 
-    int foe_count=0; //compteur d'apparition d'un ennemi
-    int foe_countMax=10; // Fréquence d'apparation d'un ennemi
-    boolean enemy= false; //Présence d'un ennemi
-    int enemy_index=0; //pointe le rang de l'ennemi
+    int foe_count=0; //Enemy spawn counter
+    int foe_countMax=10; // Enemy spawn frequency
+    boolean enemy= false;
+    int enemy_index=0; //Point out the rank of the enemy
     int speed=15;
 
     public void foeSummoning (long time){
@@ -135,9 +160,9 @@ public abstract class AnimatedThing {
             if(enemy) {
                 double position = getXFoe();
                 if (position>-150){
-                    Foe.sprite_foe.setX(position - speed); //On modifie le x associé à l'image dans le background de gauche
+                    Foe.sprite_foe.setX(position - speed); //Adjusting the x-coordinate associated with the image in the left background
                     setXFoe(position - speed);
-                    Foe.sprite_foe.setViewport(new Rectangle2D( 150*enemy_index+65, 200, 150, 200)); // On affiche la nouvelle position du Hero à chaque appel de update
+                    Foe.sprite_foe.setViewport(new Rectangle2D( 150*enemy_index+65, 200, 150, 200));
                 }
                 else{
                     enemy=false;
@@ -174,5 +199,5 @@ public abstract class AnimatedThing {
     public double getXFoe() {return x_foe;}
     public double getYFoe() {return y_foe;}
     //public int getRunIndex() {return runIndex;}
-    public int getJumpIndex() {return jumpIndex;}
+    public int getJumpOk() {return jumpOk;}
 }

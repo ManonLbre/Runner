@@ -2,7 +2,6 @@ import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
@@ -21,7 +20,10 @@ public class GameScene extends Scene {
     protected static Hero ball;
     protected double numberOfLives;
     protected static int offset;
-    protected int rogner=10;
+    protected int cut=10;
+    private StaticThing home;
+
+    protected boolean start = false;
 
     public GameScene(Group root){
         super(root);
@@ -33,15 +35,22 @@ public class GameScene extends Scene {
         life = new StaticThing(20,10,33,77,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\life.png",3);
         foe = new Foe("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\foe.png",500,165,1);
         //ball = new Hero("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\heros.png",100,200,0);
-        root.getChildren().add(left.getImageView()); // add the object to the root
+
+        home = new StaticThing(-55,-44,600,350,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\home.png",0);
+
+
+        root.getChildren().add(left.getImageView()); // Add the object to the root
         root.getChildren().add(right.getImageView());
         root.getChildren().add(hero.getSprite_hero());
         root.getChildren().add(life.getImageView());
-        root.getChildren().get(3).setScaleX(2);
+        root.getChildren().get(3).setScaleX(2); // Resize the image
         root.getChildren().get(3).setScaleY(2);
         root.getChildren().add(foe.getSprite_foe());
-        root.getChildren().get(4).setScaleX(0.45); //redimensionne l'image
+        root.getChildren().get(4).setScaleX(0.45);
         root.getChildren().get(4).setScaleY(0.45);
+        root.getChildren().add(home.getImageView());
+        root.getChildren().get(5).setScaleX(0.85);
+        root.getChildren().get(5).setScaleY(0.85);
         numberOfLives = 3;
         offset = 11;
     }
@@ -73,14 +82,15 @@ public class GameScene extends Scene {
             this.render(Cam);
             this.setOnKeyPressed( (event)->{
 
-                //Jump by pressing the Space bar
-                if (event.getCode() == KeyCode.SPACE) {
-                    Hero.jump();
-                    //Cam.jump();
+                //Jump by pressing the up arrow key
+                if (event.getCode() == KeyCode.UP) {
+                    if (hero.getJumpOk() ==0) {
+                        Hero.jump();
+                        //Cam.jump();
+                    }
                 }
-
-                //Shoot by pressing the Enter key
-                if (event.getCode() == KeyCode.ENTER) {
+                //Shoot by pressing the right arrow key
+                if (event.getCode() == KeyCode.RIGHT) {
                     Hero.shoot();
                 }
             });
@@ -94,17 +104,16 @@ public class GameScene extends Scene {
     boolean collision_test_ancien=false;
     public void checkCollision(Hero hero, Foe foe) {
 
-        Rectangle rect1 = new Rectangle((int) hero.getXHero()+rogner, (int) hero.getYHero()+rogner, 85-rogner, 100-rogner);
-        Rectangle rect2 = new Rectangle((int) foe.getXFoe()+rogner+42, (int) 230+rogner, (int) 67.5-rogner, 90-rogner);
-        //System.out.println("X hero "+hero.getXHero()+", Y hero "+hero.getYHero());
-        //System.out.println("X foe "+foe.getXFoe()+rogner+42+", Y foe "+foe.getYFoe());
+        Rectangle rect1 = new Rectangle((int) hero.getXHero()+cut, (int) hero.getYHero()+cut, 85-cut, 100-cut);
+        Rectangle rect2 = new Rectangle((int) foe.getXFoe()+cut+42, (int) 230+cut, (int) 67.5-cut, 90-cut);
 
         if (rect1.intersects(rect2)) {
 
-            if (collision_test_ancien==false){
+            if (!collision_test_ancien){
                 numberOfLives-=0.5;
                 collision_test_ancien = true;
-                System.out.println("Collision détectée !");
+                heroBlink(); // Trigger the hero's blinking
+                System.out.println("Collision detected !");
             }
         }
         else{
@@ -112,8 +121,51 @@ public class GameScene extends Scene {
         }
     }
 
+    public void heroBlink() {
+        AnimationTimer blinkTimer = new AnimationTimer() {
+            private long startTime = 0;
+            private long lastBlinkTime = 0;
+            private boolean heroVisible = true;
+
+            @Override
+            public void start() {
+                super.start();
+                startTime = System.nanoTime();
+            }
+
+            @Override
+            public void handle(long now) {
+                if (now - startTime >= 1.5 * 1e9) { // Stop after 1.5 s
+                    hero.getSprite_hero().setOpacity(1.0);
+                    this.stop(); // Stop AnimationTimer
+                } else if (now - lastBlinkTime >= 0.2 * 1e9) {
+                    hero.getSprite_hero().setOpacity(heroVisible ? 0.5 : 1.0);
+                    heroVisible = !heroVisible;
+                    lastBlinkTime = now;
+                }
+            }
+        };
+
+        blinkTimer.start();
+    }
+
     public void GameOver(Group root){
         gameOver = new StaticThing(50,-75,500,500,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\gameover.png",0);
         root.getChildren().add(gameOver.getImageView());
     }
+    public boolean getStart() {
+        return start;
+    }
+    public void start(){
+        this.setOnKeyPressed( (event)->{
+
+            //Jump by pressing the up arrow key
+            if (event.getCode() == KeyCode.ENTER) {
+                this.start=true;
+                fond.getChildren().get(5).setVisible(false);
+            }
+        });
+    }
+
 }
+
