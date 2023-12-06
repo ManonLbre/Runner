@@ -1,32 +1,24 @@
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.io.File;
 import java.util.Random;
 
 public abstract class AnimatedThing {
     private double x_hero, y_hero;
     private double x_foe, y_foe;
-
-    //private static Image spriteSheet;
     protected static ImageView sprite_hero;
     protected static ImageView sprite_foe;
     protected static int altitude;
     protected static int index;
-    //private long duration;
     protected static int maxIndex;
-    //private int sizeWindow;
     protected static int offset;
     static int countFrame;
     static int maxFrame;
-    private int jumpIndex=0;
     protected static int jumpOk = 0;
-    private double verticalVelocity = 0; // Initial vertical speed
-    private double gravity = 2; // Gravity value
+    private double verticalVelocity = 0;
+    private double gravity = 2;
     protected static int shoot = 0;
-    protected static int indexShoot;
-    protected static int maxIndexShoot;
     private double status;
     private Random rand = new Random();
 
@@ -74,21 +66,8 @@ public abstract class AnimatedThing {
         if (countFrame == maxFrame) {
             //Jump
             if (jumpOk > 1) {
-                /*if (jumpOk > 20) {
-                    Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
-                    sprite_hero.setY(200 - altitude * 5);
-                    setYHero(200 - altitude * 5);
-                    altitude = altitude + 1;
-                }
-                else {
-                    Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
-                    sprite_hero.setY(200 - altitude * 5);
-                    setYHero(200 - altitude * 5);
-                    altitude = altitude - 1;
-                }
-                jumpOk = jumpOk - 1;*/
 
-                if (jumpOk > 13) {
+                if (jumpOk > 15) {
                     Hero.sprite_hero.setViewport(new Rectangle2D(0, 165, 85, 100));
                     verticalVelocity = -11; // Initial upward velocity
                 } else {
@@ -144,8 +123,6 @@ public abstract class AnimatedThing {
         else {
             countFrame += 1;
         }
-        x_hero = getXHero();
-        y_hero = getYHero();
     }
 
     int foe_count=0; //Enemy spawn counter
@@ -159,7 +136,7 @@ public abstract class AnimatedThing {
         if (countFrame == maxFrame) {
             if(enemy) {
                 double position = getXFoe();
-                if (position>-150){
+                if (position>-105){
                     Foe.sprite_foe.setX(position - speed); //Adjusting the x-coordinate associated with the image in the left background
                     setXFoe(position - speed);
                     Foe.sprite_foe.setViewport(new Rectangle2D( 150*enemy_index+65, 200, 150, 200));
@@ -176,13 +153,10 @@ public abstract class AnimatedThing {
                 else {
                     enemy = true;
                     enemy_index = rand.nextInt(3);
-                    setXFoe(550);
-
+                    setXFoe(520+rand.nextInt(10)*10);
                 }
             }
         }
-        x_foe = getXFoe();
-        y_foe = getYFoe();
     }
 
     //Setter
@@ -190,14 +164,11 @@ public abstract class AnimatedThing {
     public void setYHero(double y) {this.y_hero = y;}
     public void setXFoe(double x) {this.x_foe = x;}
     public void setYFoe(double y) {this.y_foe = y;}
-    //public void setRunIndex(int runIndex) {this.runIndex = runIndex;}
-    public void setJumpIndex(int jumpIndex) {this.jumpIndex = jumpIndex;}
 
     //Getter
     public double getXHero() {return x_hero;}
     public double getYHero() {return y_hero;}
     public double getXFoe() {return x_foe;}
     public double getYFoe() {return y_foe;}
-    //public int getRunIndex() {return runIndex;}
     public int getJumpOk() {return jumpOk;}
 }

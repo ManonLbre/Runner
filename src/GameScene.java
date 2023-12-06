@@ -17,10 +17,10 @@ public class GameScene extends Scene {
     protected Foe foe;
     protected static StaticThing life;
     protected static StaticThing gameOver;
-    protected static Hero ball;
+    //protected static Hero ball;
     protected double numberOfLives;
     protected static int offset;
-    protected int cut=10;
+    protected int cut=20;
     private StaticThing home;
 
     protected boolean start = false;
@@ -36,7 +36,7 @@ public class GameScene extends Scene {
         foe = new Foe("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\foe.png",500,165,1);
         //ball = new Hero("D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\heros.png",100,200,0);
 
-        home = new StaticThing(-55,-44,600,350,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\home.png",0);
+        home = new StaticThing(-55,-75,600,350,"D:\\Manon\\Documents\\Ecole\\ENSEA\\2A\\S7\\Mineure Info\\Java\\Projet\\Runner\\img\\home.png",0);
 
 
         root.getChildren().add(left.getImageView()); // Add the object to the root
